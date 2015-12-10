@@ -99,7 +99,7 @@
 
       /// cycle count
       var step = 0
-      var maxSteps = 15
+      var maxSteps = 25
 
       // emulate system cycle
       function cycle() {
@@ -109,12 +109,12 @@
         opcode = memory[pc] << 8 | memory[pc + 1]
 
         // 36 instructions (math, graphics, flow control)
-        var code = opcode & 0xF000      // instruction
-        var nnn  = opcode & 0x0FFF      // nnn or addr - A 12-bit value, the lowest 12 bits of the instruction
-        var kk   = opcode & 0x00FF      // kk or byte - An 8-bit value, the lowest 8 bits of the instruction
-        var n    = opcode & 0x000F      // n or nibble - A 4-bit value, the lowest 4 bits of the instruction
-        var x    = opcode & 0x0F00 >> 8 // x - A 4-bit value, the lower 4 bits of the high byte of the instruction
-        var y    = opcode & 0x00F0 >> 4 // y - A 4-bit value, the upper 4 bits of the low byte of the instruction
+        var code = opcode & 0xF000        // instruction
+        var nnn  = opcode & 0x0FFF        // nnn or addr - A 12-bit value, the lowest 12 bits of the instruction
+        var kk   = opcode & 0x00FF        // kk or byte - An 8-bit value, the lowest 8 bits of the instruction
+        var n    = opcode & 0x000F        // n or nibble - A 4-bit value, the lowest 4 bits of the instruction
+        var x    = (opcode & 0x0F00) >> 8 // x - A 4-bit value, the lower 4 bits of the high byte of the instruction
+        var y    = (opcode & 0x00F0) >> 4 // y - A 4-bit value, the upper 4 bits of the low byte of the instruction
 
         // output pre cycle
         console.log(' --- cycle ' + step + ' --- ')
@@ -342,7 +342,7 @@
         }
 
         if (step < maxSteps) {
-          setTimeout(cycle, 800)
+          setTimeout(cycle, 200)
         }
       }
 
