@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <style>
+      * { margin: 0; padding: 0; background: #000 }
+      canvas { position: absolute; width: 128px; height: 64px; top: 50%; left: 50%; margin-left: -64px; margin-top: -32px; background: #fff }
+    </style>
+  </head>
   <body>
     <canvas id='canvas'></canvas>
-    <style>
-      * { margin: 0 padding: 0 }
-      acanvas { width: 100%; height: 100% }
-    </style>
     <script>
       // 64x32 pixel monochrome
       var canvas = document.getElementById('canvas')
       var ctx = canvas.getContext('2d')
       canvas.width = 64
       canvas.height = 32
-
-      var x = 5
-      var y = 5
-      ctx.fillStyle = 'rgba(0,0,0,1)'
-      // ctx.fillRect(x, y, 1, 1)
 
       // 4k memory
       //   0x000-0x1FF - Chip 8 interpreter (contains font set in emu)
@@ -31,19 +32,23 @@
       var stack = []     // 16 level jump stack
       var sp             // stack pointer
       var keyStates = [] // hex keypad states 0x0 to 0xF
+      var gfx = []       // 64x32 pixel array
+      var redraw = false // flag to redraw screen
 
       // initialize registries and memory
       function initialize() {
         // todo: reset display
 
-        pc = 0x200 // program counter start
-        op = 0     // reset current opcode
-        I  = 0     // reset index register
-        sp = 0     // reset stack pointer
+        pc = 0x200    // program counter start
+        op = 0        // reset current opcode
+        I  = 0        // reset index register
+        sp = 0        // reset stack pointer
+        redraw = true // flag to redraw screen
 
-        memory = Array.apply(null, Array(4096)).map(Number.prototype.valueOf,0) // reset memory
-        stack = Array.apply(null, Array(15)).map(Number.prototype.valueOf, 0)   // reset jump stack
-        V = Array.apply(null, Array(16)).map(Number.prototype.valueOf, 0)       // reset registers 8bit registers
+        memory = Array.apply(null, Array(4096)).map(Number.prototype.valueOf,0)  // reset memory
+        stack = Array.apply(null, Array(15)).map(Number.prototype.valueOf, 0)    // reset jump stack
+        V = Array.apply(null, Array(16)).map(Number.prototype.valueOf, 0)        // reset registers 8bit registers
+        gfx = Array.apply(null, Array(64 * 32)).map(Number.prototype.valueOf, 0) // reset display
 
         // hexadecimal digits (0 through F sprites)
         // 5 bytes long, or 8x5 pixels stored
@@ -75,29 +80,51 @@
       }
       loadProgram()
 
+      // draw screen
+      function drawScreen() {
+        for (var m = 0; m < gfx.length; m++) {
+          var xpos = m % 64
+          var ypos = Math.floor(m / 64)
+
+          if (gfx[m] == 1) {
+            ctx.fillStyle = "black"
+          } else {
+            ctx.fillStyle = "white"
+          }
+
+          ctx.fillRect(xpos, ypos, 1, 1)
+        }
+        redraw = false
+      }
+
+      /// cycle count
       var step = 0
-      while (step < 7) {
+      var maxSteps = 15
+
+      // emulate system cycle
+      function cycle() {
         step += 1
 
         // read opcode - (2 bytes long, most-significant-byte first)
         opcode = memory[pc] << 8 | memory[pc + 1]
 
         // 36 instructions (math, graphics, flow control)
+        var code = opcode & 0xF000      // instruction
         var nnn  = opcode & 0x0FFF      // nnn or addr - A 12-bit value, the lowest 12 bits of the instruction
+        var kk   = opcode & 0x00FF      // kk or byte - An 8-bit value, the lowest 8 bits of the instruction
         var n    = opcode & 0x000F      // n or nibble - A 4-bit value, the lowest 4 bits of the instruction
         var x    = opcode & 0x0F00 >> 8 // x - A 4-bit value, the lower 4 bits of the high byte of the instruction
         var y    = opcode & 0x00F0 >> 4 // y - A 4-bit value, the upper 4 bits of the low byte of the instruction
-        var kk   = opcode & 0x00FF      // kk or byte - An 8-bit value, the lowest 8 bits of the instruction
-        var code = opcode & 0xF000      // instruction
 
         // output pre cycle
-        console.log(' --- cycle --- ');
+        console.log(' --- cycle ' + step + ' --- ')
         console.log('pc:', pc, 'sp:', sp)
         console.log('instruction:', opcode.toString(16), 'code:', code.toString(16))
         console.log('nnn:', nnn, 'n:', n, 'x:', x, 'y:', y, 'kk:', kk)
         console.log('v:', V)
         console.log('stack:', stack)
 
+        if (redraw) drawScreen() // redraw if needed
         pc += 2 // increment program counter
 
         switch (code) {
@@ -110,7 +137,8 @@
               // 00E0 - CLS
               //  Clear the display.
               case 0x00E0:
-                ctx.clearRect(0, 0, canvas.width, canvas.height)
+                gfx = Array.apply(null, Array(64 * 32)).map(Number.prototype.valueOf, 0) // reset display
+                redraw = true
               break
 
               // 00EE - RET
@@ -134,8 +162,8 @@
           //  Call subroutine at nnn.
           //  The interpreter increments the stack pointer, then puts the current PC on the top of the stack. The PC is then set to nnn.
           case 0x2000:
+            sp++
             stack[sp] = pc
-            sp += 1
             pc = nnn
           break
 
@@ -188,15 +216,6 @@
           // 8xy4 - ADD Vx, Vy
           //  Set Vx = Vx + Vy, set VF = carry.
           //  The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0. Only the lowest 8 bits of the result are kept, and stored in Vx.
-          case 0x0004:
-            if (V[(opcode & 0x00F0) >> 4] > (0xFF - V[(opcode & 0x0F00) >> 8])) {
-              V[0xF] = 1 //carry
-            } else {
-              V[0xF] = 0
-            }
-
-            V[(opcode & 0x0F00) >> 8] += V[(opcode & 0x00F0) >> 4]
-          break
 
           // 8xy5 - SUB Vx, Vy
           //  Set Vx = Vx - Vy, set VF = NOT borrow.
@@ -217,6 +236,11 @@
           // 9xy0 - SNE Vx, Vy
           //  Skip next instruction if Vx != Vy.
           //  The values of Vx and Vy are compared, and if they are not equal, the program counter is increased by 2.
+          case 0x9000:
+            if (V[x] !== V[y]) {
+              pc += 2
+            }
+          break
 
           // Annn - LD I, addr
           //  Set I = nnn.
@@ -244,38 +268,28 @@
             // collision bit off
             V[0xF] = 0
 
-            for (var yline = 0; yline < height; yline++) {
-              var pixel = memory[I + yline]
-              for (var xline = 0; xline < 8; xline++) {
-                if ((pixel & (0x80 >> xline)) !== 0) {
-                    var xx = xpos + xline
-                    var yy = ypos + yline
+            for (var row = 0; row < height; row++) {
+              var pixel = memory[I + row]
+              for (var col = 0; col < 8; col++) {
+                if ((pixel & (0x80 >> col)) !== 0) {
+                  var xx = xpos + col
+                  var yy = ypos + row
 
-                    if (xx >= 64) {
-                      xx -= 64
-                    }
+                  if (xx >= 64) { xx -= 64 }
+                  if (xx < 0) { xx += 64 }
+                  if (yy >= 32) { yy -= 32 }
+                  if (yy < 0) { yy += 32 }
 
-                    if (xx < 0) {
-                      xx += 64
-                    }
+                  if (gfx[yy * 64 + xx] == 1) {
+                    V[0xF] = 1; // collision bit on
+                  }
 
-                    if (yy >= 32) {
-                      yy -= 32
-                    }
-
-                    if (yy < 0) {
-                      yy += 32
-                    }
-
-                    ctx.fillStyle = 'rgba(0,0,0,1)'
-                    if (ctx.getImageData(2 + xx, 2 + yy, 1, 1).data.toString() === [0,0,0,1]) {
-                      ctx.fillStyle = 'rgba(0,0,0,0)'
-                    }
-                    ctx.fillRect(2 + xx, 2 + yy, 1, 1)
-                    V[0xF] = 1
+                  gfx[yy * 64 + xx] ^= 1
                 }
               }
             }
+
+            redraw = true
           break
 
           // Ex9E - SKP Vx
@@ -313,11 +327,6 @@
           // Fx33 - LD B, Vx
           //  Store BCD representation of Vx in memory locations I, I+1, and I+2.
           //  The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.
-          case 0x0033:
-            memory[I] = V[(opcode & 0x0F00) >> 8] / 100
-            memory[I + 1] = (V[(opcode & 0x0F00) >> 8] / 10) % 10
-            memory[I + 2] = (V[(opcode & 0x0F00) >> 8] % 100) % 10
-          break
 
           // Fx55 - LD [I], Vx
           //  Store registers V0 through Vx in memory starting at location I.
@@ -326,8 +335,19 @@
           // Fx65 - LD Vx, [I]
           //  Read registers V0 through Vx from memory starting at location I.
           //  The interpreter reads values from memory starting at location I into registers V0 through Vx.
+
+          // Not Implemented - Error
+          default:
+            console.error('error: Instruction not implemented: ', code)
+        }
+
+        if (step < maxSteps) {
+          setTimeout(cycle, 800)
         }
       }
+
+      // start emulation
+      cycle()
     </script>
   </body>
 </html>
