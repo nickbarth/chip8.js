@@ -45,10 +45,10 @@
         sp = 0        // reset stack pointer
         redraw = true // flag to redraw screen
 
-        memory = Array.apply(null, Array(4096)).map(Number.prototype.valueOf,0)  // reset memory
-        stack = Array.apply(null, Array(15)).map(Number.prototype.valueOf, 0)    // reset jump stack
-        V = Array.apply(null, Array(16)).map(Number.prototype.valueOf, 0)        // reset registers 8bit registers
-        gfx = Array.apply(null, Array(64 * 32)).map(Number.prototype.valueOf, 0) // reset display
+        memory = Array.apply(null, Array(4096)).map(function() { return 0 }) // reset memory
+        stack = Array.apply(null, Array(15)).map(function() { return 0 })    // reset jump stack
+        V = Array.apply(null, Array(16)).map(function() { return 0 })        // reset registers 8bit registers
+        gfx = Array.apply(null, Array(64 * 32)).map(function() { return 0 }) // reset display
 
         // hexadecimal digits (0 through F sprites)
         // 5 bytes long, or 8x5 pixels stored
@@ -137,7 +137,7 @@
               // 00E0 - CLS
               //  Clear the display.
               case 0x00E0:
-                gfx = Array.apply(null, Array(64 * 32)).map(Number.prototype.valueOf, 0) // reset display
+                gfx = Array.apply(null, Array(64 * 32)).map(function() { return 0 }) // reset display
                 redraw = true
               break
 
