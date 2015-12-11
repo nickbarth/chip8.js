@@ -19,6 +19,9 @@
       canvas.width = 64
       canvas.height = 32
 
+      // audio beep
+      var beep = new Audio('data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=')
+
       // 4k memory
       //   0x000-0x1FF - Chip 8 interpreter (contains font set in emu)
       //   0x050-0x0A0 - Used for the built in 4x5 pixel font set (0-F)
@@ -33,17 +36,22 @@
       var sp             // stack pointer
       var keyStates = [] // hex keypad states 0x0 to 0xF
       var gfx = []       // 64x32 pixel array
+      var delay = 0      // delay timer
+      var sound = 0      // sound timer
       var redraw = false // flag to redraw screen
+      var loaded = false // flag for rom load
+
+      // rom url
+      var url = ''
 
       // initialize registries and memory
       function initialize() {
-        // todo: reset display
-
-        pc = 0x200    // program counter start
-        op = 0        // reset current opcode
-        I  = 0        // reset index register
-        sp = 0        // reset stack pointer
-        redraw = true // flag to redraw screen
+        pc = 0x200     // program counter start
+        op = 0         // reset current opcode
+        I  = 0         // reset index register
+        sp = 0         // reset stack pointer
+        redraw = true  // flag to redraw screen
+        loaded = false // flag for rom load
 
         memory = Array.apply(null, Array(4096)).map(function() { return 0 }) // reset memory
         stack = Array.apply(null, Array(15)).map(function() { return 0 })    // reset jump stack
@@ -73,12 +81,28 @@
       initialize()
 
       // load program into memory
-      function loadProgram() {
-        // IBM Logo
-        var prog = [0x00, 0xe0, 0xa2, 0x2a, 0x60, 0x0c, 0x61, 0x08, 0xd0, 0x1f, 0x70, 0x09, 0xa2, 0x39, 0xd0, 0x1f, 0xa2, 0x48, 0x70, 0x08, 0xd0, 0x1f, 0x70, 0x04, 0xa2, 0x57, 0xd0, 0x1f, 0x70, 0x08, 0xa2, 0x66, 0xd0, 0x1f, 0x70, 0x08, 0xa2, 0x75, 0xd0, 0x1f, 0x12, 0x28, 0xff, 0x00, 0xff, 0x00, 0x3c, 0x00, 0x3c, 0x00, 0x3c, 0x00, 0x3c, 0x00, 0xff, 0x00, 0xff, 0xff, 0x00, 0xff, 0x00, 0x38, 0x00, 0x3f, 0x00, 0x3f, 0x00, 0x38, 0x00, 0xff, 0x00, 0xff, 0x80, 0x00, 0xe0, 0x00, 0xe0, 0x00, 0x80, 0x00, 0x80, 0x00, 0xe0, 0x00, 0xe0, 0x00, 0x80, 0xf8, 0x00, 0xfc, 0x00, 0x3e, 0x00, 0x3f, 0x00, 0x3b, 0x00, 0x39, 0x00, 0xf8, 0x00, 0xf8, 0x03, 0x00, 0x07, 0x00, 0x0f, 0x00, 0xbf, 0x00, 0xfb, 0x00, 0xf3, 0x00, 0xe3, 0x00, 0x43, 0xe0, 0x00, 0xe0, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0xe0, 0x00, 0xe0]
-        Array.prototype.splice.apply(memory, [0x200, prog.length].concat(prog))
+      function loadROM(url) {
+        if (!url.length) {
+          // Chip 8 Logo
+          var prog = [0x00, 0xe0, 0xa2, 0x48, 0x60, 0x00, 0x61, 0x1e, 0x62, 0x00, 0xd2, 0x02, 0xd2, 0x12, 0x72, 0x08, 0x32, 0x40, 0x12, 0x0a, 0x60, 0x00, 0x61, 0x3e, 0x62, 0x02, 0xa2, 0x4a, 0xd0, 0x2e, 0xd1, 0x2e, 0x72, 0x0e, 0xd0, 0x2e, 0xd1, 0x2e, 0xa2, 0x58, 0x60, 0x0b, 0x61, 0x08, 0xd0, 0x1f, 0x70, 0x0a, 0xa2, 0x67, 0xd0, 0x1f, 0x70, 0x0a, 0xa2, 0x76, 0xd0, 0x1f, 0x70, 0x03, 0xa2, 0x85, 0xd0, 0x1f, 0x70, 0x0a, 0xa2, 0x94, 0xd0, 0x1f, 0x12, 0x46, 0xff, 0xff, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xff, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xff, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0xff, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xff, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0xff, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xff, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0xff, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0xff, 0xff]
+          loaded = true
+          Array.prototype.splice.apply(memory, [0x200, prog.length].concat(prog))
+        } else {
+          // Load Rom
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', url, true);
+          xhr.responseType = 'arraybuffer';
+          xhr.send();
+
+          xhr.onload = function(e) {
+            var rom = new Uint8Array(xhr.response)
+            for (i = 0, len = rom.length; i < len; i++) { memory[0x200 + i] = rom[i] }
+            loaded = true
+            console.log(' --- rom loaded --- ')
+          }
+        }
       }
-      loadProgram()
+      loadROM(url)
 
       // draw screen
       function drawScreen() {
@@ -99,7 +123,7 @@
 
       /// cycle count
       var step = 0
-      var maxSteps = 25
+      var maxSteps = 0
 
       // emulate system cycle
       function cycle() {
@@ -170,14 +194,29 @@
           // 3xkk - SE Vx, byte
           //  Skip next instruction if Vx = kk.
           //  The interpreter compares register Vx to kk, and if they are equal, increments the program counter by 2.
+          case 0x3000:
+            if (V[x] === kk) {
+              pc += 2
+            }
+          break
 
           // 4xkk - SNE Vx, byte
           //  Skip next instruction if Vx != kk.
           //  The interpreter compares register Vx to kk, and if they are not equal, increments the program counter by 2.
+          case 0x4000:
+            if (V[x] !== kk) {
+              pc += 2
+            }
+          break
 
           // 5xy0 - SE Vx, Vy
           //  Skip next instruction if Vx = Vy.
           //  The interpreter compares register Vx to register Vy, and if they are equal, increments the program counter by 2.
+          case 0x5000:
+            if (V[x] === V[y]) {
+              pc += 2
+            }
+          break
 
           // 6xkk - LD Vx, byte
           //  Set Vx = kk.
@@ -191,47 +230,92 @@
           //  Adds the value kk to the value of register Vx, then stores the result in Vx.
           case 0x7000:
             V[x] += kk
-
-            if (V[x] > 255) {
-              V[x] -= 256
-            }
+            V[x] &= 0x00FF
           break
 
-          // 8xy0 - LD Vx, Vy
-          //  Set Vx = Vy.
-          //  Stores the value of register Vy in register Vx.
+          case 0x8000:
+            switch (opcode & 0x000F) {
+              // 8xy0 - LD Vx, Vy
+              //  Set Vx = Vy.
+              //  Stores the value of register Vy in register Vx.
+              case 0x0000:
+                V[x] = V[y]
+              break
 
-          // 8xy1 - OR Vx, Vy
-          //  Set Vx = Vx OR Vy.
-          //  Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx. A bitwise OR compares the corrseponding bits from two values, and if either bit is 1, then the same bit in the result is also 1. Otherwise, it is 0.
+              // 8xy1 - OR Vx, Vy
+              //  Set Vx = Vx OR Vy.
+              //  Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx. A bitwise OR compares the corrseponding bits from two values, and if either bit is 1, then the same bit in the result is also 1. Otherwise, it is 0.
+              case 0x0001:
+                V[x] |= V[y]
+              break
 
-          // 8xy2 - AND Vx, Vy
-          //  Set Vx = Vx AND Vy.
-          //  Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx. A bitwise AND compares the corrseponding bits from two values, and if both bits are 1, then the same bit in the result is also 1. Otherwise, it is 0.
+              // 8xy2 - AND Vx, Vy
+              //  Set Vx = Vx AND Vy.
+              //  Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx. A bitwise AND compares the corrseponding bits from two values, and if both bits are 1, then the same bit in the result is also 1. Otherwise, it is 0.
+              case 0x0002:
+                V[x] &= V[y]
+              break
 
-          // 8xy3 - XOR Vx, Vy
-          //  Set Vx = Vx XOR Vy.
-          //  Performs a bitwise exclusive OR on the values of Vx and Vy, then stores the result in Vx. An exclusive OR compares the corrseponding bits from two values, and if the bits are not both the same, then the corresponding bit in the result is set to 1. Otherwise, it is 0.
+              // 8xy3 - XOR Vx, Vy
+              //  Set Vx = Vx XOR Vy.
+              //  Performs a bitwise exclusive OR on the values of Vx and Vy, then stores the result in Vx. An exclusive OR compares the corrseponding bits from two values, and if the bits are not both the same, then the corresponding bit in the result is set to 1. Otherwise, it is 0.
+              case 0x0003:
+                V[x] ^= V[y]
+              break
 
-          // 8xy4 - ADD Vx, Vy
-          //  Set Vx = Vx + Vy, set VF = carry.
-          //  The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0. Only the lowest 8 bits of the result are kept, and stored in Vx.
+              // 8xy4 - ADD Vx, Vy
+              //  Set Vx = Vx + Vy, set VF = carry.
+              //  The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0. Only the lowest 8 bits of the result are kept, and stored in Vx.
+              case 0x0004:
+                V[x] += V[y]
+                V[0xF] = (V[x] & 0x10) >> 8
+                V[x] &= 0x00FF
+              break
 
-          // 8xy5 - SUB Vx, Vy
-          //  Set Vx = Vx - Vy, set VF = NOT borrow.
-          //  If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.
+              // 8xy5 - SUB Vx, Vy
+              //  Set Vx = Vx - Vy, set VF = NOT borrow.
+              //  If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.
+              case 0x0005:
+                if (V[x] > V[y]) V[0xF] = 1
+                else V[0xF] = 0
 
-          // 8xy6 - SHR Vx {, Vy}
-          //  Set Vx = Vx SHR 1.
-          //  If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
+                V[x] -= V[y]
+                V[x] &= 0x00FF
+              break
 
-          // 8xy7 - SUBN Vx, Vy
-          //  Set Vx = Vy - Vx, set VF = NOT borrow.
-          //  If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
+              // 8xy6 - SHR Vx {, Vy}
+              //  Set Vx = Vx SHR 1.
+              //  If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
+              case 0x0006:
+                V[0xF] = V[x] & 0x1
+                V[x] >>= 1
+              break
 
-          // 8xyE - SHL Vx {, Vy}
-          //  Set Vx = Vx SHL 1.
-          //  If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
+              // 8xy7 - SUBN Vx, Vy
+              //  Set Vx = Vy - Vx, set VF = NOT borrow.
+              //  If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
+              case 0x0007:
+                if (V[y] > V[x]) V[0xF] = 1
+                else V[0xF] = 0
+
+                V[x] = V[y] - V[x]
+                V[x] = V[x] & 0x00FF
+              break
+
+              // 8xyE - SHL Vx {, Vy}
+              //  Set Vx = Vx SHL 1.
+              //  If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
+              case 0x000E:
+                V[0xF] = +(V[x] & 0x80)
+                V[x] <<= 1
+                V[x] &= 0x00FF
+              break
+
+              // Not Implemented - Error
+              default:
+                console.error('error: Instruction not implemented: ', opcode.toString(16))
+            }
+          break
 
           // 9xy0 - SNE Vx, Vy
           //  Skip next instruction if Vx != Vy.
@@ -252,10 +336,16 @@
           // Bnnn - JP V0, addr
           //  Jump to location nnn + V0.
           //  The program counter is set to nnn plus the value of V0.
+          case 0xB000:
+            pc = nnn + V[0]
+          break
 
           // Cxkk - RND Vx, byte
           //  Set Vx = random byte AND kk.
           //  The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See instruction 8xy2 for more information on AND.
+          case 0xC000:
+            V[x] = Math.floor(Math.random()*0xFF) & kk
+          break
 
           // Dxyn - DRW Vx, Vy, nibble
           //  Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
@@ -292,62 +382,140 @@
             redraw = true
           break
 
-          // Ex9E - SKP Vx
-          //  Skip next instruction if key with the value of Vx is pressed.
-          //  Checks the keyboard, and if the key corresponding to the value of Vx is currently in the down position, PC is increased by 2.
+          case 0xE000:
+            switch (opcode & 0x00FF) {
+              // Ex9E - SKP Vx
+              //  Skip next instruction if key with the value of Vx is pressed.
+              //  Checks the keyboard, and if the key corresponding to the value of Vx is currently in the down position, PC is increased by 2.
+              case 0x009E:
+                // TODO: implement keyboard input
+              break
 
-          // ExA1 - SKNP Vx
-          //  Skip next instruction if key with the value of Vx is not pressed.
-          //  Checks the keyboard, and if the key corresponding to the value of Vx is currently in the up position, PC is increased by 2.
+              // ExA1 - SKNP Vx
+              //  Skip next instruction if key with the value of Vx is not pressed.
+              //  Checks the keyboard, and if the key corresponding to the value of Vx is currently in the up position, PC is increased by 2.
+              case 0x00A1:
+                // TODO: implement keyboard input
+                pc += 2
+              break
 
-          // Fx07 - LD Vx, DT
-          //  Set Vx = delay timer value.
-          //  The value of DT is placed into Vx.
+              // Not Implemented - Error
+              default:
+                console.error('error: Instruction not implemented: ', opcode.toString(16))
+            }
+          break
 
-          // Fx0A - LD Vx, K
-          //  Wait for a key press, store the value of the key in Vx.
-          //  All execution stops until a key is pressed, then the value of that key is stored in Vx.
+          case 0xF000:
+            switch (opcode & 0x00FF) {
+              // Fx07 - LD Vx, DT
+              //  Set Vx = delay timer value.
+              //  The value of DT is placed into Vx.
+              case 0x0007:
+                V[x] = delay
+              break
 
-          // Fx15 - LD DT, Vx
-          //  Set delay timer = Vx.
-          //  DT is set equal to the value of Vx.
+              // Fx0A - LD Vx, K
+              //  Wait for a key press, store the value of the key in Vx.
+              //  All execution stops until a key is pressed, then the value of that key is stored in Vx.
+              case 0x000A:
+              break
 
-          // Fx18 - LD ST, Vx
-          //  Set sound timer = Vx.
-          //  ST is set equal to the value of Vx.
+              // Fx15 - LD DT, Vx
+              //  Set delay timer = Vx.
+              //  DT is set equal to the value of Vx.
+              case 0x0015:
+                delay = V[x]
+              break
 
-          // Fx1E - ADD I, Vx
-          //  Set I = I + Vx.
-          //  The values of I and Vx are added, and the results are stored in I.
+              // Fx18 - LD ST, Vx
+              //  Set sound timer = Vx.
+              //  ST is set equal to the value of Vx.
+              case 0x0018:
+                sound = V[x]
+              break
 
-          // Fx29 - LD F, Vx
-          //  Set I = location of sprite for digit Vx.
-          //  The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx. See section 2.4, Display, for more information on the Chip-8 hexadecimal font.
+              // Fx1E - ADD I, Vx
+              //  Set I = I + Vx.
+              //  The values of I and Vx are added, and the results are stored in I.
+              case 0x001E:
+                I += V[x]
+              break
 
-          // Fx33 - LD B, Vx
-          //  Store BCD representation of Vx in memory locations I, I+1, and I+2.
-          //  The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.
+              // Fx29 - LD F, Vx
+              //  Set I = location of sprite for digit Vx.
+              //  The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx. See section 2.4, Display, for more information on the Chip-8 hexadecimal font.
+              case 0x0029:
+                I = V[x] * 5
+              break
 
-          // Fx55 - LD [I], Vx
-          //  Store registers V0 through Vx in memory starting at location I.
-          //  The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
+              // Fx33 - LD B, Vx
+              //  Store BCD representation of Vx in memory locations I, I+1, and I+2.
+              //  The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.
+              case 0x0033:
+                var num = V[x]
 
-          // Fx65 - LD Vx, [I]
-          //  Read registers V0 through Vx from memory starting at location I.
-          //  The interpreter reads values from memory starting at location I into registers V0 through Vx.
+                for (var m = 3; m > 0; m--) {
+                  memory[I + m - 1] = parseInt(num % 10)
+                  num /= 10
+                }
+              break
+
+              // Fx55 - LD [I], Vx
+              //  Store registers V0 through Vx in memory starting at location I.
+              //  The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
+              case 0x0055:
+                for (var m = 0; m <= V[x]; m++) {
+                  memory[I+m] = V[m]
+                }
+              break
+
+              // Fx65 - LD Vx, [I]
+              //  Read registers V0 through Vx from memory starting at location I.
+              //  The interpreter reads values from memory starting at location I into registers V0 through Vx.
+              case 0x0065:
+                for (var m = 0; m <= V[x]; m++) {
+                  V[m] = memory[I+m]
+                }
+              break
+
+              // Not Implemented - Error
+              default:
+                console.error('error: Instruction not implemented: ', opcode.toString(16))
+            }
+          break
 
           // Not Implemented - Error
           default:
-            console.error('error: Instruction not implemented: ', code)
+            console.error('error: Instruction not implemented: ', code.toString(16))
         }
 
-        if (step < maxSteps) {
-          setTimeout(cycle, 200)
+        // update timers
+        if (delay > 0) {
+          delay--
+        }
+
+        if (sound > 0) {
+          if (sound == 1) {
+            beep.play()
+          }
+          sound--
+        }
+
+        if (maxSteps === 0 || step < maxSteps) {
+          setTimeout(cycle, 1)
         }
       }
 
       // start emulation
-      cycle()
+      function loading() {
+        if (loaded) {
+          cycle()
+        } else {
+          setTimeout(loading, 1)
+        }
+      }
+
+      loading()
     </script>
   </body>
 </html>
