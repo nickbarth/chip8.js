@@ -42,7 +42,7 @@
       var loaded = false // flag for rom load
 
       // rom url
-      var url = ''
+      var url = 'https://rawgit.com/bloody76/Chip8-Emulator/master/roms/Joust.ch8'
 
       // initialize registries and memory
       function initialize() {
@@ -169,8 +169,7 @@
               //  Return from a subroutine.
               //  The interpreter sets the program counter to the address at the top of the stack, then subtracts 1 from the stack pointer.
               case 0x00EE:
-                pc = stack[sp]
-                sp -= 1
+                pc = stack[--sp]
               break
             }
           break
@@ -186,8 +185,8 @@
           //  Call subroutine at nnn.
           //  The interpreter increments the stack pointer, then puts the current PC on the top of the stack. The PC is then set to nnn.
           case 0x2000:
-            sp++
             stack[sp] = pc
+            sp++
             pc = nnn
           break
 
@@ -276,9 +275,7 @@
               //  Set Vx = Vx - Vy, set VF = NOT borrow.
               //  If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.
               case 0x0005:
-                if (V[x] > V[y]) V[0xF] = 1
-                else V[0xF] = 0
-
+                V[0xF] = +(V[x] > V[y])
                 V[x] -= V[y]
                 V[x] &= 0x00FF
               break
@@ -295,9 +292,7 @@
               //  Set Vx = Vy - Vx, set VF = NOT borrow.
               //  If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
               case 0x0007:
-                if (V[y] > V[x]) V[0xF] = 1
-                else V[0xF] = 0
-
+                V[0xF] = +(V[y] > V[x])
                 V[x] = V[y] - V[x]
                 V[x] = V[x] & 0x00FF
               break
