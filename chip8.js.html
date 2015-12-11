@@ -42,7 +42,7 @@
       var loaded = false // flag for rom load
 
       // rom url
-      var url = 'https://rawgit.com/nickbarth/chip8.js/master/joust.c8'
+      var url = 'https://rawgit.com/nickbarth/chip8.js/master/ufo.c8'
 
       // initialize registries and memory
       function initialize() {
@@ -185,8 +185,8 @@
           //  Call subroutine at nnn.
           //  The interpreter increments the stack pointer, then puts the current PC on the top of the stack. The PC is then set to nnn.
           case 0x2000:
-            stack[sp] = pc
             sp++
+            stack[sp] = pc
             pc = nnn
           break
 
