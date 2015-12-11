@@ -95,10 +95,15 @@
           xhr.send();
 
           xhr.onload = function(e) {
-            var rom = new Uint8Array(xhr.response)
-            for (i = 0, len = rom.length; i < len; i++) { memory[0x200 + i] = rom[i] }
-            loaded = true
-            console.log(' --- rom loaded --- ')
+            if (xhr.status === 200) {
+              var rom = new Uint8Array(xhr.response)
+              for (i = 0, len = rom.length; i < len; i++) { memory[0x200 + i] = rom[i] }
+              loaded = true
+              console.log(' --- rom loaded --- ')
+            } else {
+              console.log(' --- rom load failed --- ')
+              loadROM();
+            }
           }
         }
       }
