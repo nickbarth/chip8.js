@@ -5,7 +5,6 @@
     <meta http-equiv='cache-control' content='no-cache'>
     <meta http-equiv='expires' content='0'>
     <meta http-equiv='pragma' content='no-cache'>
-    <script src="http://cdn.rawgit.com/jpillora/xdomain/0.7.3/dist/xdomain.min.js" slave="http://rawgit.com/nickbarth/chip8.js/master/proxy.html"></script>
     <style>
       * { margin: 0; padding: 0; background: #000 }
       canvas { position: absolute; width: 640px; height: 320px; top: 50%; left: 50%; margin-left: -320px; margin-top: -160px; background: #fff; image-rendering: pixelated }
@@ -43,7 +42,7 @@
       var loaded = false // flag for rom load
 
       // rom url
-      var url = 'http://rawgit.com/nickbarth/chip8.js/master/ufo.c8'
+      var url = 'https://rawgit.com/nickbarth/chip8.js/master/ufo.c8'
 
       // initialize registries and memory
       function initialize() {
