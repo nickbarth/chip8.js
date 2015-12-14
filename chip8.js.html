@@ -52,7 +52,7 @@
         65: 0x7, 83: 0x8, 68: 0x9, 70: 0xe, // asdf :: 789e
         90: 0xa, 88: 0x0, 67: 0xb, 86: 0xf  // zxcv :: a0bf
       }
-      
+
       // rom url
       var url = 'https://rawgit.com/nickbarth/chip8.js/master/ufo.c8'
 
@@ -188,7 +188,8 @@
               //  Return from a subroutine.
               //  The interpreter sets the program counter to the address at the top of the stack, then subtracts 1 from the stack pointer.
               case 0x00EE:
-                pc = stack[--sp]
+                pc = stack[sp]
+                sp--
               break
             }
           break
@@ -351,7 +352,7 @@
           //  Jump to location nnn + V0.
           //  The program counter is set to nnn plus the value of V0.
           case 0xB000:
-            pc = nnn + V[0]
+            pc = nnn + V[0x0]
           break
 
           // Cxkk - RND Vx, byte
@@ -532,12 +533,12 @@
         }
       }
       loading()
-      
+
       // key events
       document.addEventListener('keydown', function (event) {
         keys[keybinds[event.which]] = 1
       })
-      
+
       document.addEventListener('keyup', function (event) {
         keys[keybinds[event.which]] = 0
       })
