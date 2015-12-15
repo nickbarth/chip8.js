@@ -6,8 +6,15 @@
     <meta http-equiv='expires' content='0'>
     <meta http-equiv='pragma' content='no-cache'>
     <style>
-      * { margin: 0; padding: 0; background: #000 }
+      * { margin: 0; padding: 0; background: #000; -webkit-appearance: none }
       canvas { position: absolute; width: 640px; height: 320px; top: 50%; left: 50%; margin-left: -320px; margin-top: -160px; background: #fff; image-rendering: -webkit-optimize-contrast; image-rendering: pixelated }
+      .controls { display: none; }
+
+      @media only screen and (max-device-width: 500px) {
+        canvas { width: 100%; top: 0%; left: 0%; right: 0%;  margin: 0 }
+        .controls { display: block; margin: 35% 75px 0 0; text-align: center; }
+        .controls button { font-family: monospace; outline: none; color: #fff; font-size: 100px; border: none; margin-right: 100px; width: 100px; line-height: 200px }
+      }
     </style>
   </head>
   <body>
@@ -532,13 +539,35 @@
       loading()
 
       // key events
+      function setKey(key, position) {
+        keys[key] = position
+      }
+
       document.addEventListener('keydown', function (event) {
-        keys[keybinds[event.which]] = 1
+        setKey(keybinds[event.which], 1)
       })
 
       document.addEventListener('keyup', function (event) {
-        keys[keybinds[event.which]] = 0
+        setKey(keybinds[event.which], 0)
       })
     </script>
+    <div class="controls">
+      <button ontouchstart="setKey(0x1, 1)" ontouchleave="setKey(0x1, 0)">1</button>
+      <button ontouchstart="setKey(0x2, 1)" ontouchleave="setKey(0x2, 0)">2</button>
+      <button ontouchstart="setKey(0x3, 1)" ontouchleave="setKey(0x3, 0)">3</button>
+      <button ontouchstart="setKey(0xc, 1)" ontouchleave="setKey(0xc, 0)">C</button><br>
+      <button ontouchstart="setKey(0x4, 1)" ontouchleave="setKey(0x4, 0)">4</button>
+      <button ontouchstart="setKey(0x5, 1)" ontouchleave="setKey(0x5, 0)">5</button>
+      <button ontouchstart="setKey(0x6, 1)" ontouchleave="setKey(0x6, 0)">6</button>
+      <button ontouchstart="setKey(0xd, 1)" ontouchleave="setKey(0xd, 0)">D</button><br>
+      <button ontouchstart="setKey(0x7, 1)" ontouchleave="setKey(0x7, 0)">7</button>
+      <button ontouchstart="setKey(0x8, 1)" ontouchleave="setKey(0x8, 0)">8</button>
+      <button ontouchstart="setKey(0x9, 1)" ontouchleave="setKey(0x9, 0)">9</button>
+      <button ontouchstart="setKey(0xe, 1)" ontouchleave="setKey(0xe, 0)">E</button><br>
+      <button ontouchstart="setKey(0xa, 1)" ontouchleave="setKey(0xa, 0)">A</button>
+      <button ontouchstart="setKey(0x0, 1)" ontouchleave="setKey(0x0, 0)">0</button>
+      <button ontouchstart="setKey(0xb, 1)" ontouchleave="setKey(0xb, 0)">B</button>
+      <button ontouchstart="setKey(0xf, 1)" ontouchleave="setKey(0xf, 0)">F</button><br>
+    </div>
   </body>
 </html>
