@@ -473,7 +473,7 @@
                 var num = V[x]
 
                 for (var m = 3; m > 0; m--) {
-                  memory[I + m - 1] = parseInt(num % 10)
+                  memory[I + m - 1] = parseInt(num % 10, 10)
                   num /= 10
                 }
               break
@@ -482,7 +482,7 @@
               //  Store registers V0 through Vx in memory starting at location I.
               //  The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
               case 0x0055:
-                for (var m = 0; m <= V[x]; m++) {
+                for (var m = 0; m <= x; m++) {
                   memory[I+m] = V[m]
                 }
               break
@@ -491,7 +491,7 @@
               //  Read registers V0 through Vx from memory starting at location I.
               //  The interpreter reads values from memory starting at location I into registers V0 through Vx.
               case 0x0065:
-                for (var m = 0; m <= V[x]; m++) {
+                for (var m = 0; m <= x; m++) {
                   V[m] = memory[I+m]
                 }
               break
